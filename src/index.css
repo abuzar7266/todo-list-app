@@ -11,3 +11,38 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.task-card{
+  text-align: center;
+  padding: 10px;
+  height: fit-content;
+  width: 60%;
+  background-color: white;
+}
+
+.task-field{
+  height: 40px;
+  width: 93%;
+  margin: 0;
+  border: 2px solid #EFF0F0;
+  box-shadow: none;
+  font-size: x-large;
+  padding: 8px;
+
+}
+
+.task-card h1{
+  color:blue;
+  font-family:'Times New Roman';
+  font-size:7vh;
+  padding: 10px;
+}
+
+hr.list-end{
+  border: 1px solid #EFF0F0;
+  width: 96.5%;
+  margin-top: 20px;
+}
+
+td{
+  display: table-cell;
+}
