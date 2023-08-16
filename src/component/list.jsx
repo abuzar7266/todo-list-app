@@ -1,16 +1,14 @@
 import React from 'react';
 import ListItem from './listItem';
-const List = ({taskList, status, iD, handleChecked, handleDeleteTask,handleMakeUpdate,task, handleEnter, setTask}) =>{
+import '../asset/css/list.css';
+const List = ({taskList, setTaskList}) =>{
     return (<>
-            <table className="table table-sm" style={{textAlign:'left',fontSize:'smaller'}} >
-                <tbody style={{border:'none',borderBottom:'1px solid black'}}>
+            <table className="table table-sm">
+                <tbody>
                     {
                         taskList.map((data,idx)=>{
                             return (<>
-                                <ListItem task={task} status={status} iD={iD} 
-                                setTask={setTask} handleEnter={handleEnter} 
-                                handleMakeUpdate={handleMakeUpdate} handleDeleteTask={handleDeleteTask} 
-                                handleChecked={handleChecked} data={data} idx={idx}/>
+                                <ListItem taskList={taskList} setTaskList={setTaskList} task={data}/>
                             </>)
                         })
                     }

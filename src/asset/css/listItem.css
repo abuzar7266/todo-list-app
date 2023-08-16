@@ -1,0 +1,11 @@
+.column-1{
+    padding:15px;
+}
+.column-2{
+    text-align:right;
+    padding:15px;
+}
+.icon-format{
+    font-size:13px;
+    cursor:pointer;
+}
