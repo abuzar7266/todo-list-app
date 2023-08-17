@@ -1,16 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { Container } from "react-bootstrap";
 import List from "../component/list";
 import '../asset/css/home.css';
+import { addTask } from "../redux/feature/todo-list/todoSlice";
+import { useDispatch, useSelector } from "react-redux";
 const Home = () =>{
-    const [taskList,setTaskList] = useState([]);
+    const taskList = useSelector((state)=> state.todo.taskList );
+    const dispatch = useDispatch();
     const [task, setTask] = useState("");
+    useEffect(()=>{
+        console.log(taskList);
+    },[taskList])
     return (<>
     <Container className="container" fluid>
         <form action="" onSubmit={(e)=>{
             e.preventDefault();
-            setTaskList([...taskList, {id:`${taskList.length+1}`, status:0,task:task}]);
+            dispatch(addTask(task));
             setTask("");
         }}>
         <div className="task-card">
@@ -22,7 +28,7 @@ const Home = () =>{
                 }}
             />
             <hr className="list-end"/>
-            <List taskList={taskList} setTaskList={setTaskList}/>
+            <List taskList={taskList} />
         </div>
         </form>
     </Container>
