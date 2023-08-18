@@ -1,26 +1,57 @@
-import { createSlice,nanoid } from "@reduxjs/toolkit";
+import { createSlice, nanoid } from "@reduxjs/toolkit";
 
 const initialState = {
-    taskList: []
-}
+  loading: false,
+  taskList: [],
+};
 
 export const todoSlice = createSlice({
-    name: 'todo',
-    initialState,
-    reducers:{
-        addTask: (state, action)=>{
-            state.taskList = [...state.taskList,{status:0,id: nanoid(), task: action.payload}]
+  name: "todo",
+  initialState,
+  reducers: {
+    fetchTodoSuccess: (state, action) => {
+      state.taskList = [...action.payload];
+      state.loading = false;
+    },
+    fetchTodo: (state, action) => {
+      state.loading = true;
+    },
+    addTask: (state, action) => {
+      state.loading = false;
+    },
+    addTaskSucess: (state, action) => {
+      state.taskList = [
+        ...state.taskList,
+        {
+          isChecked: action.payload.completed,
+          id: nanoid(),
+          description: action.payload.todo,
         },
-        updateTask: (state, action)=>{
-           state.taskList[state.taskList.findIndex((x)=>x.id===action.payload.id)].task = action.payload.task;
-        },
-        deleteTask: (state, action)=>{
-            state.taskList = [...state.taskList.filter((x)=>x.id!==action.payload)];
-        },
-        taskMarkdone: (state, action)=>{
-            state.taskList[state.taskList.findIndex((x)=>x.id==action.payload)].status = 1;
-        }
-    }
-})
-export const { addTask, updateTask, deleteTask, taskMarkdone } = todoSlice.actions;
+      ];
+      state.loading = true;
+    },
+    updateTask: (state, action) => {
+      state.taskList[
+        state.taskList.findIndex(x => x.id === action.payload.id)
+      ].description = action.payload.description;
+    },
+    deleteTask: (state, action) => {
+      state.taskList = [...state.taskList.filter(x => x.id !== action.payload)];
+    },
+    taskMarkdone: (state, action) => {
+      state.taskList[
+        state.taskList.findIndex(x => x.id === action.payload)
+      ].isChecked = 1;
+    },
+  },
+});
+export const {
+  addTask,
+  updateTask,
+  deleteTask,
+  taskMarkdone,
+  fetchTodoSuccess,
+  fetchTodo,
+  addTaskSucess,
+} = todoSlice.actions;
 export default todoSlice.reducer;

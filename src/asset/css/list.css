@@ -1,8 +1,8 @@
-table{
-    text-align:left;
-    font-size:smaller;
+.list-block {
+  text-align: left;
+  font-size: smaller;
 }
-tbody{
-    border:none;
-    border-bottom:1px solid black;
+.list-body {
+  border: none;
+  border-bottom: 1px solid black;
 }
