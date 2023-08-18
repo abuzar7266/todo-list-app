@@ -10,25 +10,30 @@ export const todoSlice = createSlice({
   initialState,
   reducers: {
     fetchTodoSuccess: (state, action) => {
-      state.taskList = [...action.payload];
-      state.loading = false;
+      return {
+        ...state,
+        taskList:action.payload,
+        loading:false
+      };
     },
     fetchTodo: (state, action) => {
-      state.loading = true;
+      return {
+        ...state, 
+        loading:true
+      };
     },
     addTask: (state, action) => {
-      state.loading = false;
+        return {
+            ...state, 
+            loading:true
+        };
     },
     addTaskSucess: (state, action) => {
-      state.taskList = [
-        ...state.taskList,
-        {
-          isChecked: action.payload.completed,
-          id: nanoid(),
-          description: action.payload.todo,
-        },
-      ];
-      state.loading = true;
+      return {
+        ...state,
+        taskList:[...state.taskList, { isChecked: action.payload.completed, id: nanoid(), description: action.payload.todo }],
+        loading: false
+      }
     },
     updateTask: (state, action) => {
       state.taskList[

@@ -1,7 +1,7 @@
 .column-1 {
   padding: 15px;
   border-bottom: 1px solid black;
-  display: flexbox;
+  display: flex;
 }
 .column-2 {
   text-align: right;
