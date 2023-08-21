@@ -1,6 +1,9 @@
 import React from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import {
   updateTask,
   deleteTask,
@@ -11,60 +14,73 @@ import { CheckBox } from "@mui/icons-material";
 import { Edit } from "@mui/icons-material";
 import { Delete } from "@mui/icons-material";
 import "asset/css/listItem.css";
-import { wait } from "@testing-library/user-event/dist/utils";
 
+const listItemSchema = yup
+  .object({
+    description: yup.string().min(5).max(30).required(),
+  })
+  .required();
 const ListItem = ({ task }) => {
   const dispatch = useDispatch();
-  const [stateTodo, setStateTodo] = useState(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    setValue,
+  } = useForm({
+    resolver: yupResolver(listItemSchema),
+  });
+  const [stateTodo, setStateTodo] = useState(0);
+
+  const onSubmitHandler = (e) => {
+    dispatch(
+      updateTask({
+        id: task.id,
+        description: e["description"],
+      })
+    );
+    setStateTodo(!stateTodo);
+    reset();
+  };
+
   return (
     <tr>
-      <td colSpan={10} className="column-1">
-        {!task.isChecked ? (
-          <SquareOutlined
-            className="icon-format"
-            onClick={() => {
-              dispatch(taskMarkdone(task.id));
-            }}
-          />
-        ) : (
-          <CheckBox className="icon-format" />
-        )}
-
-        {stateTodo ? (
-          <form
-            onSubmitCapture={e => {
-              e.preventDefault();
-              dispatch(
-                updateTask({
-                  id: stateTodo.id,
-                  description: stateTodo.description,
-                })
-              );
-              setStateTodo(null);
-            }}
-          >
-            <input
-              type="text"
-              name="update-task"
-              value={stateTodo.description}
-              onChange={e => {
-                setStateTodo({ ...stateTodo, description: e.target.value });
+      <td>
+        <div className="d-flex p-1">
+          {!task.isChecked ? (
+            <SquareOutlined
+              className="icon-format"
+              onClick={() => {
+                dispatch(taskMarkdone(task.id));
               }}
             />
-          </form>
-        ) : (
-          <span className={task.isChecked ? "task-text" : ""}>
-            {task.description}
-          </span>
-        )}
+          ) : (
+            <CheckBox className="icon-format" />
+          )}
+
+          {stateTodo ? (
+            <form onSubmitCapture={handleSubmit(onSubmitHandler)}>
+              <input type="text" {...register("description")} />
+              <p className="text-danger">{errors.description?.message}</p>
+            </form>
+          ) : (
+            <span className={task.isChecked ? "task-text" : ""}>
+              {task.description}
+            </span>
+          )}
+        </div>
       </td>
-      <td className="column-2">
+      <td>
         <Edit
           className="icon-format"
-          onClick={() => {
-            if (!stateTodo) setStateTodo(task);
+          onClick={(e) => {
+            setValue("description", task.description);
+            setStateTodo(!stateTodo);
           }}
         />
+      </td>
+      <td>
         <Delete
           className="icon-format"
           onClick={() => {
