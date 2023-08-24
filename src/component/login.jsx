@@ -1,18 +1,23 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { connect, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { login, refresh, logout } from "redux/feature/auth/authSlice";
 
 const schema = yup
   .object({
     username: yup.string().min(5).max(16).required(),
-    password: yup.string().min(5).max(16).required()
+    password: yup.string().min(5).max(16).required(),
   })
   .required();
-
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
 const Login = (props) => {
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -21,61 +26,68 @@ const Login = (props) => {
   } = useForm({
     resolver: yupResolver(schema),
   });
-  useEffect(() => {
-    if (localStorage.getItem("token")) localStorage.removeItem("token");
-  }, []);
   const onSubmitHandler = (e) => {
-    console.log(e);
-    axios
-      .post("/user/login", e)
-      .then((res) => {
-        if (res.status == 200) {
-          localStorage.setItem("token", res.data.token);
-          localStorage.setItem("login", true);
-          reset();
-          window.location = "http://localhost:3000/todo";
-        }else{
-            if(!(res.data.token)){
-                alert("Incorrect username or password");
-            }
-        }
-      })
-      .catch((err)=>{
-        alert("Incorrect username or password");
-      })
+    dispatch(login(e));
+    reset();
   };
+  useEffect(()=>{
+    dispatch(logout());
+  },[])
+  useEffect(() => {
+    console.log(props.auth);
+    if (props.auth.state == 1) {
+      localStorage.setItem("token", props.auth.token);
+      dispatch(refresh());
+      window.location = "/todo";
+    }
+  }, [props.auth.state]);
   return (
     <>
       <div className="card">
         <div className="card-header">
           <h1 className="header-form">Login</h1>
-          { !isDirty || !isValid && <p className="alert alert-sm alert-danger">Username or password is not valid</p>}
+          {!isDirty ||
+            (!isValid && (
+              <p className="alert alert-sm alert-danger">
+                Username or password is not valid
+              </p>
+            ))}
         </div>
         <form action="" onSubmitCapture={handleSubmit(onSubmitHandler)}>
-            <div className="card-body">
+          <div className="card-body">
             <input
-                type="text"
-                className="demographic-field"
-                placeholder="Username"
-                {...register("username")}
+              type="text"
+              className="demographic-field"
+              placeholder="Username"
+              {...register("username")}
             />
             <input
-                type="password"
-                className="demographic-field"
-                placeholder="Password"
-                {...register("password")}
+              type="password"
+              className="demographic-field"
+              placeholder="Password"
+              {...register("password")}
             />
-            </div>
-            <input type="submit" className="submit" value="Login" disabled={!isDirty || !isValid}/>
+          </div>
+          <input
+            type="submit"
+            className="submit"
+            value="Login"
+            disabled={!isDirty || !isValid}
+          />
         </form>
         <div className="submit-btn">
-          <button className="move-btn" onClick={()=>{
-            props.setAuth();
-          }}>Go to Signup Page</button>
+          <button
+            className="move-btn"
+            onClick={() => {
+              props.setAuth();
+            }}
+          >
+            Go to Signup Page
+          </button>
         </div>
       </div>
     </>
   );
 };
 
-export default Login;
+export default connect(mapStateToProps)(Login);

@@ -1,18 +1,17 @@
-import React,{ useState} from "react";
+import React, { useState } from "react";
 import { Container } from "react-bootstrap";
 import Login from "component/login";
 import Signup from "component/signup";
-import "asset/css/home.css";
-import "asset/css/todo.css";
-const Auth = (props) => {
+import "asset/css/auth.css";
+const Auth = () => {
   const [state, setState] = useState(0);
-  const setAuth = () =>{
+  const setAuth = () => {
     setState(!state);
-  }
+  };
   return (
     <>
       <Container className="container" fluid>
-        { state ? <Signup setAuth={setAuth}/>: <Login setAuth={setAuth}/>}
+        {state ? <Signup setAuth={setAuth} /> : <Login setAuth={setAuth} />}
       </Container>
     </>
   );

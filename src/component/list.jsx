@@ -1,19 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { connect, useDispatch } from "react-redux";
 import ListItem from "./listItem";
 import "asset/css/list.css";
-const List = ({ taskList, setTaskList }) => {
+
+const mapStateToProps = (state) => ({
+  taskList: state.todo.taskList,
+});
+const List = ({ taskList }) => {
+  useEffect(() => {
+    console.log(taskList);
+  }, [taskList]);
+  const [state, setState] = useState({
+    id: "",
+    isEditable: 0,
+  });
+  const handleEditable = (id, isEditable) => {
+    setState({ id: id, isEditable: isEditable });
+  };
   return (
     <>
       <table className="table table-sm list-block">
         <tbody className="list-body">
           {taskList.map((data, idx) => {
             return (
-                <ListItem 
-                  key={idx}
-                  taskList={taskList}
-                  setTaskList={setTaskList}
-                  task={data}
-                />
+              <ListItem
+                key={idx}
+                task={data}
+                state={state}
+                handleEditable={handleEditable}
+              />
             );
           })}
         </tbody>
@@ -22,4 +37,4 @@ const List = ({ taskList, setTaskList }) => {
   );
 };
 
-export default List;
+export default connect(mapStateToProps)(List);

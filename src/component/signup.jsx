@@ -3,7 +3,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { connect, useDispatch } from "react-redux";
 import * as yup from "yup";
+import { refresh, signup } from "redux/feature/auth/authSlice";
 
 const schemaSignup = yup
   .object({
@@ -14,8 +16,11 @@ const schemaSignup = yup
     lastname: yup.string().required(),
   })
   .required();
-
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
 const Signup = (props) => {
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -25,24 +30,22 @@ const Signup = (props) => {
     resolver: yupResolver(schemaSignup),
   });
   useEffect(() => {
-   if (localStorage.getItem("token")) localStorage.removeItem("token");
-  }, []);
+    if (localStorage.getItem("token")) window.location = "/todo";
+    if (props.auth.state === 1) alert(props.auth.msg);
+    else if (props.auth.state === 200) {
+      alert(props.auth.msg);
+      dispatch(refresh());
+      props.setAuth();
+    }
+  }, [props.auth]);
   const onSubmitHandler = (e) => {
-    axios
-      .post("/user/signup", e)
-      .then((res) => {
-        if (res.status == 200) {
-          props.setAuth();
-        } else {
-          if (!res.data.status) {
-            alert("Failed to create an account");
-          }
-        }
-      })
-      .catch((err) => {
-        alert("Failed to create an account");
-      });
+    dispatch(signup(e));
   };
+  useEffect(() => {
+    if (props.auth.state == 3) {
+      props.setAuth();
+    }
+  }, [props.auth.state]);
   return (
     <>
       <div className="card">
@@ -110,4 +113,4 @@ const Signup = (props) => {
   );
 };
 
-export default Signup;
+export default connect(mapStateToProps)(Signup);

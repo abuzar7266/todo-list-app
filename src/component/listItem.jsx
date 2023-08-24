@@ -1,6 +1,6 @@
 import React from "react";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { connect, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -20,7 +20,7 @@ const listItemSchema = yup
     description: yup.string().min(5).max(30).required(),
   })
   .required();
-const ListItem = ({ task }) => {
+const ListItem = ({ task, state, handleEditable }) => {
   const dispatch = useDispatch();
   const {
     register,
@@ -31,7 +31,6 @@ const ListItem = ({ task }) => {
   } = useForm({
     resolver: yupResolver(listItemSchema),
   });
-  const [stateTodo, setStateTodo] = useState(0);
 
   const onSubmitHandler = (e) => {
     dispatch(
@@ -40,9 +39,12 @@ const ListItem = ({ task }) => {
         description: e["description"],
       })
     );
-    setStateTodo(!stateTodo);
+    handleEditable('', !state.isEditable);
     reset();
   };
+  useEffect(()=>{
+    handleEditable('', 0);
+  },[task])
 
   return (
     <tr>
@@ -60,7 +62,7 @@ const ListItem = ({ task }) => {
               dispatch(taskMarkdone({id: task.id, isChecked: !task.isChecked}));
             }}/>
           )}
-          {stateTodo ? (
+          {(state.isEditable && task.id==state.id) ? (
             <form onSubmitCapture={handleSubmit(onSubmitHandler)} id={task.id}>
               <input type="text" {...register("description")} />
               <p className="text-danger">{errors.description?.message}</p>
@@ -72,20 +74,26 @@ const ListItem = ({ task }) => {
           )}
         </div>
       </td>
+      <td className="col-5"></td>
       <td>
         <Edit
           className="icon-format"
           onClick={(e) => {
             setValue("description", task.description);
-            setStateTodo(!stateTodo);
+            if(state.isEditable && task.id!=state.id)
+              handleEditable(task.id, state.isEditable);
+            else if(state.isEditable && task.id===state.id){
+              handleEditable('-', !state.isEditable);
+            }else{
+              handleEditable(task.id, !state.isEditable);
+            }
           }}
         />
-      </td>
-      <td>
         <Delete
           className="icon-format"
           onClick={() => {
             dispatch(deleteTask(task.id));
+            reset();
           }}
         />
       </td>

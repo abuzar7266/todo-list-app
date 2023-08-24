@@ -31,6 +31,7 @@ const Todo = (props) => {
   useEffect(()=>{
     dispatch(fetchTodo());
   },[])
+
   const onSubmitHandler = (e) => {
     dispatch(addTask(e["task"]));
     reset();
@@ -47,7 +48,7 @@ const Todo = (props) => {
     <span><LogoutIcon style={{marginLeft: '70%', marginTop:'5%', cursor: 'pointer'}} onClick={()=>{
       localStorage.setItem("login", false);
       localStorage.removeItem("token");
-      window.location = "/";
+      window.location = "/auth";
     }}/></span>
       <Container className="container" fluid>
         <form action="" onSubmit={handleSubmit(onSubmitHandler)}>
@@ -56,13 +57,12 @@ const Todo = (props) => {
             <input
               placeholder="Input task name and then enter to add"
               type="text"
-              s
               className="task-field"
               {...register("task")}
             />
             <p className="text-danger">{errors.task?.message}</p>
             <hr className="list-endline" />
-            <List taskList={props.taskList} />
+            <List/>
           </div>
         </form>
       </Container>
