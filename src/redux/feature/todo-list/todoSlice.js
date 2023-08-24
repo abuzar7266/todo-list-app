@@ -1,7 +1,6 @@
-import { createSlice, nanoid } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  loading: false,
   taskList: [],
 };
 
@@ -12,41 +11,33 @@ export const todoSlice = createSlice({
     fetchTodoSuccess: (state, action) => {
       return {
         ...state,
-        taskList:action.payload,
-        loading:false
+        taskList:[...action.payload]
       };
     },
     fetchTodo: (state, action) => {
       return {
-        ...state, 
-        loading:true
+        ...state
       };
     },
     addTask: (state, action) => {
         return {
-            ...state, 
-            loading:true
+            ...state
         };
     },
-    addTaskSucess: (state, action) => {
-      return {
-        ...state,
-        taskList:[...state.taskList, { isChecked: action.payload.completed, id: nanoid(), description: action.payload.todo }],
-        loading: false
-      }
-    },
     updateTask: (state, action) => {
-      state.taskList[
-        state.taskList.findIndex(x => x.id === action.payload.id)
-      ].description = action.payload.description;
+      return {
+        ...state
+      };
     },
     deleteTask: (state, action) => {
-      state.taskList = [...state.taskList.filter(x => x.id !== action.payload)];
+      return {
+        ...state
+      };
     },
     taskMarkdone: (state, action) => {
-      state.taskList[
-        state.taskList.findIndex(x => x.id === action.payload)
-      ].isChecked = 1;
+      return {
+        ...state
+      };
     },
   },
 });

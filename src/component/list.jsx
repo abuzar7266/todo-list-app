@@ -8,13 +8,12 @@ const List = ({ taskList, setTaskList }) => {
         <tbody className="list-body">
           {taskList.map((data, idx) => {
             return (
-              <>
-                <ListItem
+                <ListItem 
+                  key={idx}
                   taskList={taskList}
                   setTaskList={setTaskList}
                   task={data}
                 />
-              </>
             );
           })}
         </tbody>

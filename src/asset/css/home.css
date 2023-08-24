@@ -1,36 +1,56 @@
-.container {
-  background-color: #2f8baf;
-  margin: 0;
-  padding-top: 15%;
-  padding-left: 30%;
+.card{
+    justify-content: center;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    border: none;
+    background-color: rgba(88, 88, 88, 0.521);
+    width: 40rem;
+    height: fit-content;
 }
-.task-card {
-  text-align: center;
-  padding: 10px;
-  height: fit-content;
-  width: 60%;
-  background-color: white;
+.card-header{
+
+}
+.card-body{
+    padding: 10px;
+    width: 100%;
+}
+.demographic-field{
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    padding: 10px;
+    border: none;
+    width: 400px;
+    border-radius: 10px;
+}
+.submit{
+    background-color: transparent;
+    color: white;
+    border: 1px solid #2F8BAF;
+    width: 150px;
+    height: 3rem;
+    font-size: larger;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    border-radius: 10px;
 }
 
-.task-field {
-  height: 40px;
-  width: 93%;
-  margin: 0;
-  border: 2px solid #eff0f0;
-  box-shadow: none;
-  font-size: x-large;
-  padding: 8px;
+.submit:hover{
+    background-color: #2F8BAF;
+    color: black;
 }
 
-.task-card-heading {
-  color: blue;
-  font-family: "Times New Roman";
-  font-size: 7vh;
-  padding: 10px;
+.move-btn{
+    background-color: #2F8BAF;
+    color: black;
+    border: none;
+    width: 350px;
+    height: 3rem;
+    font-size: larger;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    border-radius: 10px;
+    margin: 10px;
 }
-
-.list-endline {
-  border: 1px solid #eff0f0;
-  width: 96.5%;
-  margin-top: 20px;
+.move-btn:hover{
+    color: blue;
 }

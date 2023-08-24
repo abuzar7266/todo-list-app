@@ -47,20 +47,21 @@ const ListItem = ({ task }) => {
   return (
     <tr>
       <td>
-        <div className="d-flex p-1">
+        <div className="d-flex p-1" id={task.id}>
           {!task.isChecked ? (
             <SquareOutlined
               className="icon-format"
               onClick={() => {
-                dispatch(taskMarkdone(task.id));
+                dispatch(taskMarkdone({id: task.id, isChecked: !task.isChecked}));
               }}
             />
           ) : (
-            <CheckBox className="icon-format" />
+            <CheckBox className="icon-format" onClick={() => {
+              dispatch(taskMarkdone({id: task.id, isChecked: !task.isChecked}));
+            }}/>
           )}
-
           {stateTodo ? (
-            <form onSubmitCapture={handleSubmit(onSubmitHandler)}>
+            <form onSubmitCapture={handleSubmit(onSubmitHandler)} id={task.id}>
               <input type="text" {...register("description")} />
               <p className="text-danger">{errors.description?.message}</p>
             </form>

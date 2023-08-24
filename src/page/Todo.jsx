@@ -1,20 +1,24 @@
 import React, { useEffect } from "react";
 import { Container } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import List from "component/list";
 import { addTask, fetchTodo } from "redux/feature/todo-list/todoSlice";
-import "asset/css/home.css";
+import LogoutIcon from '@mui/icons-material/Logout';
+import "asset/css/todo.css";
 
 const schema = yup
   .object({
     task: yup.string().min(5).max(30).required(),
   })
   .required();
-const Home = () => {
-  const taskList = useSelector((state) => state.todo.taskList);
+const mapStateToProps = (state) => ({
+    taskList: state.todo.taskList
+});
+
+const Todo = (props) => {
   const dispatch = useDispatch();
   const {
     register,
@@ -24,15 +28,27 @@ const Home = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
-  useEffect(() => {
+  useEffect(()=>{
     dispatch(fetchTodo());
-  }, []);
+  },[])
   const onSubmitHandler = (e) => {
     dispatch(addTask(e["task"]));
     reset();
   };
+  useEffect(()=>{
+    if(localStorage.getItem("token")){
+      
+    }else{
+      window.location = "/";
+    }
+  },[])
   return (
-    <>
+    <>{ localStorage.getItem("token") && <div>
+    <span><LogoutIcon style={{marginLeft: '70%', marginTop:'5%', cursor: 'pointer'}} onClick={()=>{
+      localStorage.setItem("login", false);
+      localStorage.removeItem("token");
+      window.location = "/";
+    }}/></span>
       <Container className="container" fluid>
         <form action="" onSubmit={handleSubmit(onSubmitHandler)}>
           <div className="task-card">
@@ -46,12 +62,13 @@ const Home = () => {
             />
             <p className="text-danger">{errors.task?.message}</p>
             <hr className="list-endline" />
-            <List taskList={taskList} />
+            <List taskList={props.taskList} />
           </div>
         </form>
       </Container>
+    </div>}
     </>
   );
 };
 
-export default Home;
+export default connect(mapStateToProps)(Todo);

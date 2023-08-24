@@ -1,10 +1,12 @@
-import Home from "./page/Home";
+import Todo from "./page/Todo";
+import Auth from "./page/Auth";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 function App() {
   return (
     <BrowserRouter className="App">
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/todo" element={<Todo />} />
+        <Route path="/auth" element={<Auth />} />
       </Routes>
     </BrowserRouter>
   );
