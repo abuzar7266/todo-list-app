@@ -7,10 +7,6 @@ var authenticate = require("../auth");
 router.use(bodyParser.json());
 /*  Get all the tasks */
 
-async function getItem() {
-  const response = await TodoSchema.find();
-  return response;
-}
 router.get("/", authenticate.verifyUser, async function (req, res, next) {
   try {
     const response = await TodoSchema.find({ user: req.user._id });
