@@ -13,11 +13,11 @@ var TodoSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  creation_time: {
+  creationTime: {
     type: Date,
     default: Date.now(),
   },
-  completed_time: {
+  completedTime: {
     type: Date,
     default: Date.now(),
   },

@@ -33,8 +33,8 @@ userRouter.post("/signup", (req, res, next) => {
   User.register(
     new User({
       username: req.body.username,
-      firstname: req.body.firstname,
-      lastname: req.body.lastname,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
       email: req.body.email,
     }),
     req.body.password,
