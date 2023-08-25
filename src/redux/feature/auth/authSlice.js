@@ -21,18 +21,25 @@ export const authSlice = createSlice({
         ...state,
       };
     },
-    authSuccess: (state, action) => {
-      if (action.payload.login) {
+    loginSuccess: (state, action) => {
         return {
           ...state,
-          login: action.payload.login,
+          login: true,
           token: action.payload.token,
-          state: action.payload.state,
+          state: 1,
         };
-      } else if (action.payload.state) {
-        alert(action.payload.msg);
-        return { ...state, state: action.payload.state };
-      }
+    },
+    loginFailure: (state, action) => {
+        alert("Incorrect username or password");
+        return { ...state, state: 2 };
+    },
+    signupSuccess: (state, action) => {
+      alert("Successfuly created an account");
+      return { ...state, state:3 };
+    },
+    signupFailure: (state, action) => {
+        alert("Failed to create an account");
+        return { ...state, state: 4 };
     },
     refresh: (state, action) => {
       return {
@@ -52,6 +59,6 @@ export const authSlice = createSlice({
     },
   },
 });
-export const { login, signup, authSuccess, refresh, logout } =
+export const { login, signup, loginSuccess, loginFailure, signupSuccess, signupFailure, refresh, logout } =
   authSlice.actions;
 export default authSlice.reducer;

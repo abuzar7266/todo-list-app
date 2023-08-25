@@ -1,18 +1,18 @@
 import React from "react";
-import { useState, useEffect } from "react";
-import { connect, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { SquareOutlined } from "@mui/icons-material";
+import { CheckBox } from "@mui/icons-material";
+import { Edit } from "@mui/icons-material";
+import { Delete } from "@mui/icons-material";
 import {
   updateTask,
   deleteTask,
   taskMarkdone,
 } from "redux/feature/todo-list/todoSlice";
-import { SquareOutlined } from "@mui/icons-material";
-import { CheckBox } from "@mui/icons-material";
-import { Edit } from "@mui/icons-material";
-import { Delete } from "@mui/icons-material";
 import "asset/css/listItem.css";
 
 const listItemSchema = yup
@@ -31,6 +31,9 @@ const ListItem = ({ task, state, handleEditable }) => {
   } = useForm({
     resolver: yupResolver(listItemSchema),
   });
+  useEffect(()=>{
+    handleEditable('', 0);
+  },[task]);
 
   const onSubmitHandler = (e) => {
     dispatch(
@@ -42,9 +45,6 @@ const ListItem = ({ task, state, handleEditable }) => {
     handleEditable('', !state.isEditable);
     reset();
   };
-  useEffect(()=>{
-    handleEditable('', 0);
-  },[task])
 
   return (
     <tr>
@@ -74,7 +74,7 @@ const ListItem = ({ task, state, handleEditable }) => {
           )}
         </div>
       </td>
-      <td className="col-5"></td>
+      <td className="col-8"></td>
       <td>
         <Edit
           className="icon-format"

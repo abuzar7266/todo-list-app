@@ -1,6 +1,6 @@
 import React from "react";
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useEffect } from "react";
+import { useNavigate } from 'react-router-dom'
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { connect, useDispatch } from "react-redux";
@@ -12,15 +12,16 @@ const schemaSignup = yup
     username: yup.string().min(5).max(16).required(),
     password: yup.string().min(5).max(16).required(),
     email: yup.string().email().required(),
-    firstname: yup.string().required(),
-    lastname: yup.string().required(),
+    firstName: yup.string().required(),
+    lastName: yup.string().required(),
   })
   .required();
 const mapStateToProps = (state) => ({
-  auth: state.auth,
+  user: state.user,
 });
 const Signup = (props) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -29,23 +30,22 @@ const Signup = (props) => {
   } = useForm({
     resolver: yupResolver(schemaSignup),
   });
+
+
+  useEffect(()=>{
+    if (localStorage.getItem("token")) navigate('/todo');
+  },[])
   useEffect(() => {
-    if (localStorage.getItem("token")) window.location = "/todo";
-    if (props.auth.state === 1) alert(props.auth.msg);
-    else if (props.auth.state === 200) {
-      alert(props.auth.msg);
+    if (props.user.state === 3) {
       dispatch(refresh());
-      props.setAuth();
+      window.location = '/auth';
     }
-  }, [props.auth]);
+  }, [props.user]);
+
+
   const onSubmitHandler = (e) => {
     dispatch(signup(e));
   };
-  useEffect(() => {
-    if (props.auth.state == 3) {
-      props.setAuth();
-    }
-  }, [props.auth.state]);
   return (
     <>
       <div className="card">
@@ -64,13 +64,13 @@ const Signup = (props) => {
               type="text"
               className="demographic-field"
               placeholder="First Name"
-              {...register("firstname")}
+              {...register("firstName")}
             />
             <input
               type="text"
               className="demographic-field"
               placeholder="Last Name"
-              {...register("lastname")}
+              {...register("lastName")}
             />
             <input
               type="text"

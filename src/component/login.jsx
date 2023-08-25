@@ -1,6 +1,6 @@
 import React from "react";
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useEffect } from "react";
+import {useNavigate} from "react-router-dom"
 import { connect, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -14,10 +14,11 @@ const schema = yup
   })
   .required();
 const mapStateToProps = (state) => ({
-  auth: state.auth,
+  user: state.user,
 });
 const Login = (props) => {
   const dispatch = useDispatch();
+  const navigation = useNavigate();
   const {
     register,
     handleSubmit,
@@ -34,13 +35,12 @@ const Login = (props) => {
     dispatch(logout());
   },[])
   useEffect(() => {
-    console.log(props.auth);
-    if (props.auth.state == 1) {
-      localStorage.setItem("token", props.auth.token);
+    if (props.user.state == 1) {
+      localStorage.setItem("token", props.user.token);
       dispatch(refresh());
-      window.location = "/todo";
+      window.location = '/todo';
     }
-  }, [props.auth.state]);
+  }, [props.user.state]);
   return (
     <>
       <div className="card">

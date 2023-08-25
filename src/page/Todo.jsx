@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import { Container } from "react-bootstrap";
 import { connect, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
@@ -18,8 +19,9 @@ const mapStateToProps = (state) => ({
     taskList: state.todo.taskList
 });
 
-const Todo = (props) => {
+const Todo = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -28,7 +30,13 @@ const Todo = (props) => {
   } = useForm({
     resolver: yupResolver(schema),
   });
+
   useEffect(()=>{
+    if(localStorage.getItem("token")){
+      
+    }else{
+      navigate('/');
+    }
     dispatch(fetchTodo());
   },[])
 
@@ -36,20 +44,14 @@ const Todo = (props) => {
     dispatch(addTask(e["task"]));
     reset();
   };
-  useEffect(()=>{
-    if(localStorage.getItem("token")){
-      
-    }else{
-      window.location = "/";
-    }
-  },[])
+  const handleLogout = () =>{
+    localStorage.setItem("login", false);
+    localStorage.removeItem("token");
+    navigate('/auth');
+  }
   return (
     <>{ localStorage.getItem("token") && <div>
-    <span><LogoutIcon style={{marginLeft: '70%', marginTop:'5%', cursor: 'pointer'}} onClick={()=>{
-      localStorage.setItem("login", false);
-      localStorage.removeItem("token");
-      window.location = "/auth";
-    }}/></span>
+    <span><LogoutIcon style={{marginLeft: '75%', marginTop:'5%', cursor: 'pointer'}} onClick={handleLogout}/></span>
       <Container className="container" fluid>
         <form action="" onSubmit={handleSubmit(onSubmitHandler)}>
           <div className="task-card">
