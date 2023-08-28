@@ -1,9 +1,6 @@
 import { call, put } from "redux-saga/effects";
 import { fetchTodoSuccess } from "redux/feature/todo-list/todoSlice";
 import { apiCallRequest } from "redux/api";
-import axios from "axios";
-axios.defaults.headers.common = { Authorization: `Bearer ${localStorage.getItem("token")}` };
-axios.defaults.baseURL = process.env.REACT_APP_API_KEY;
 
 export function* FETCH_TODO() {
   const todo = yield call(() => apiCallRequest('/', 'GET'));
