@@ -7,9 +7,6 @@ const mapStateToProps = (state) => ({
   taskList: state.todo.taskList,
 });
 const List = ({ taskList }) => {
-  useEffect(() => {
-    console.log(taskList);
-  }, [taskList]);
   const [state, setState] = useState({
     id: "",
     isEditable: 0,
