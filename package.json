@@ -16,5 +16,8 @@
     "jade": "~1.11.0",
     "mongoose": "^7.4.4",
     "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "module-alias": "^2.2.3"
   }
 }

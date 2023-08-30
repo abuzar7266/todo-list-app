@@ -7,18 +7,27 @@ var cors = require("cors");
 const MongoDbStore = require("connect-mongo");
 const dotenv = require("dotenv");
 var passport = require("passport");
-
 const { connectDB } = require("./connectDB");
 const userRouter = require("./routes/userRouter");
+const appPath = require("./utils");
+
 
 var app = express();
+
 dotenv.config({ path: "./.env" });
 
 connectDB();
 
 // view engine setup
-app.set("views", path.join(__dirname, "views"));
+app.set("views", appPath("views"));
+app.set("models", appPath("models"));
+app.set("controllers", appPath("controllers"));
+app.set("routes", appPath("routes"));
 app.set("view engine", "jade");
+
+
+app.locals.appPath = appPath;
+
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -61,3 +70,6 @@ app.use(function (err, req, res, next) {
 });
 
 module.exports = app;
+
+
+// End of File

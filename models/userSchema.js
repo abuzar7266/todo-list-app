@@ -26,6 +26,10 @@ var User = new Schema({
   },
 });
 
+
 User.plugin(passportLocalMongoose);
 
 module.exports = mongoose.model("User", User);
+
+// End of File
+
